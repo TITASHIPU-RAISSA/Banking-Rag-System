@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+ openwebui:
+  image: ghcr.io/open-webui/open-webui:latest
+  ports: 
+   - "9999:3000"
+  environment:
+  #lien pour connecter openwebui a postgresql
+   - DATABASE_URL=postgresql://openwebui:${POSTGRES_PASSWORD}@postgresql:5432/openwebui
+  #lien pour connecter openwebui a redis
+   - REDIS_URL=redis://redis:6379
+  volumes:
+      - ./README.md:/app/docs/README.md:ro
+      - ./.env:/app/config/.env:ro
+  depends_on:
+   - postgresql
+   - redis
+  restart: unless-stopped
+ postgresql:
+  image: postgres:15
+  environment:
+   - POSTGRES_USER=openwebui
+   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+   - POSTDRES_DB=openwebui
+  volumes:
+   - postgredata:/var/lib/postgresql/data 
+  restart: unless-stopped 
+
+ redis:
+   image: redis:7
+   volumes:
+    - redisdata:/data
+   restart: unless-stopped
+
+volumes:
+ redisdata:
+ postgredata: 
