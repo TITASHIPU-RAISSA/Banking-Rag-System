@@ -1,5 +1,3 @@
-version: '3'
-
 services:
  openwebui:
   image: ghcr.io/open-webui/open-webui:latest
@@ -22,7 +20,7 @@ services:
   environment:
    - POSTGRES_USER=openwebui
    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-   - POSTDRES_DB=openwebui
+   - POSTGRES_DB=openwebui
   volumes:
    - postgredata:/var/lib/postgresql/data 
   restart: unless-stopped 
